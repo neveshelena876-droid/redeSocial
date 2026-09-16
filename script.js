@@ -1,108 +1,201 @@
-//Botao curtidas
-document.addEventListener("DOMContentLoaded", () =>{
-    const likeBtn = document.querySelector(".left-actions .action-btn:first-child");
-    if (!likeBtn) return;
-    const likeSvg = likeBtn.querySelector("svg");
-
-
-    //localiza o contador
-
-    let textNode = Array.from(likeBtn.childNodes).find(node) => node.nodeType
-    === Node.TEXT_NODE && node.textContent.trim() !== ""
-);
-
-//zera o contador
-let cont = 0;
-
-//atualiza
-if(textNode){
-    textNode.textContent = `0`;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-//coração
-function applyLikedStyle (){
-likeSvg.style.fill = "#ef4444";
-likeSvg.style.stroke = "#ef4444";
-likeSvg.style.color = "#ef4444";
-
-
-//efeito curtida
-likeSvg.style.transform = "scale(1.3)";
-setTimeout(() => (likeSvg.style.transform = "scale(1)")150);
+body {
+  background-color: #0d0f12;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-//para números acima de 1000
-
-function formatLikes(num){
-    if(num >=1000){
-        return (num/1000).toFixed(1)+"K";
-    }
-    return num.toString();
+/* Moldura estilo smartphone */
+.phone-frame {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 40px;
+  padding: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
 }
 
-//incrementar a curtida
-
-function addLike(){
-    baseLikes++;
-    isLiked = true;
-    likeBtn.classList.add("liked");
-
-    if(likesCountSpan){
-        likesCountSpan.textContent = formatLikes(baseLikes);
-    }
+.phone-screen {
+  background: #1a1a1a; /* Escurecido para combinar com os botões/textos claros */
+  border-radius: 32px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-// Efeito visual de animação (bounce) no coração.
-const svg = likeBtn.querySelector("svg");
-if (svg) {
-svg.style.transform = "scale(1.4)";
-setTimeout(() => {
-svg.style.transform = "scale(1)";
-}, 150);
-}
+/* Cabeçalho do Post */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
 }
 
-// Evento de clique no BOTÃO DE CORAÇÃO (Curte ou Descurte)
-likeBtn.addEventListener("click", (e) => {
-e.stopPropagation();
-
-if (isLiked) {
-// Se já estava curtido, descurte (-1)
-isLiked = false;
-baseLikes = Math.max(0, baseLikes - 1);
-likeBtn.classList.remove("liked");
-if (likesCountSpan) {
-likesCountSpan.textContent = formatLikes(baseLikes);
-}
-} else {
-// Se não estava curtido, adiciona curtida
-addLike();
-}
-});
-
-// Evento de clique na IMAGEM PRINCIPAL (Sempre aumenta likes)
-if (postMedia) {
-postMedia.addEventListener("click", (e) => {
-e.stopPropagation();
-addLike();
-});
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-// Evento no botão de SALVAR (Bookmark)[cite: 1]
-if (bookmarkBtn) {
-let isBookmarked = false;
-bookmarkBtn.addEventListener("click", (e) => {
-e.stopPropagation();
-isBookmarked = !isBookmarked;
-bookmarkBtn.classList.toggle("bookmarked", isBookmarked);
-
-const svg = bookmarkBtn.querySelector("svg");
-if (svg) {
-svg.style.transform = "scale(1.2)";
-setTimeout(() => {
-svg.style.transform = "scale(1)";
-}, 150);
-}
-});
+.avatar-small {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
+.username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.more-options {
+  cursor: pointer;
+  color: #ffffff;
+}
+
+/* Mídia / Foto */
+.post-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: #eee;
+  cursor: pointer; /* Indicação de que é clicável */
+}
+
+.post-media img.main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Avatar sobreposto */
+.user-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+}
+
+.user-badge img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #fffbfb;
+  object-fit: cover;
+}
+
+.user-badge .plus-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #561296;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+/* Ações */
+.post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 8px 16px;
+}
+
+.left-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.action-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease, fill 0.2s ease, stroke 0.2s ease;
+}
+
+/* Estilo quando CURTIDO */
+.action-btn.liked svg {
+  fill: #ef4444;
+  stroke: #ef4444;
+}
+
+/* Estilo quando SALVO */
+.bookmark-btn.bookmarked svg {
+  fill: #ffffff;
+}
+
+/* Texto de Curtidas */
+.post-details {
+  padding: 0 16px 12px 16px;
+  font-size: 13px;
+  color: #e0e5ec;
+}
+
+.likes {
+  color: #e8ebef;
+}
+
+.likes strong {
+  color: #e9eef6;
+}
+
+/* Barra de Navegação */
+.nav-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0 16px 0;
+  border-top: 1px solid #222;
+  background: #131010;
+}
+
+.nav-item {
+  color: #e5e8ee;
+  cursor: pointer;
+}
+
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
